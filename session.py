@@ -5,15 +5,12 @@ class SessionController:
     def __init__(self):
         self.session_service_stateful = InMemorySessionService()
 
-    async def create_session(self, app_name, user_id, session_id):
+    async def create_session(self, app_name, user_id, session_id, init_state):
         self.session_stateful = await self.session_service_stateful.create_session(
             app_name = app_name,
             user_id = user_id,
             session_id = session_id,
-            state = {
-                'WorkflowState': 'Init',
-                'tool_get_jira_ticket_used': False
-            }
+            state = init_state
         )
 
     async def get_session(self, app_name, user_id, session_id):
