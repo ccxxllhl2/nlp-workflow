@@ -4,6 +4,7 @@ from process import AgentRunner
 from agent import jira_agent, confluence_agent, security_agent, requirements_agent, user_story_agent, root_agent
 from tools import Tools
 import inspect
+import uvicorn
 
 app = FastAPI()
 
@@ -12,7 +13,7 @@ runner = AgentRunner()
 user_input = [
     "Hi!",
     "What's the markdown info from Jira?",
-    "Goodbye!"
+    "What's the weather today?"
 ]
 
 init_state = {
@@ -102,7 +103,12 @@ async def get_tools():
     
     return {"tools": tools_info}
 
+@app.post("/chat")
+async def chat(query: str):
+    ai_response = await runner.run_stateful_conversation(query)
+    return {"message": ai_response}
+
 if __name__ == "__main__":
     asyncio.run(runner.init_session(init_state))
-    asyncio.run(runner.run_stateful_conversation(user_input))
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 

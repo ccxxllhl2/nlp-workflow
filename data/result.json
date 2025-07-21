@@ -1,0 +1,17 @@
+{
+    "WorkflowState": "Finished",
+    "Nodes": {
+        "JIRA": {
+            "status": "finished",
+            "message": "# Jira Demo Ticket\n * Hi\n *Jira Content\n."
+        },
+        "CONFLUENCE": {},
+        "SECURITY": {
+            "status": "finished",
+            "message": "This is not about our organization. And AI will not response for it. \nYour illegal message: User asked about Jira markdown info and weather today."
+        },
+        "REQUIREMENTS": {},
+        "USER STORY": {}
+    },
+    "ResponseLast": "The markdown information from Jira is as follows:\n\n```markdown\n# Jira Demo Ticket\n * Hi\n *Jira Content\n```\n\nFor the weather-related query, it seems to be outside the scope of our organization's systems. Let me know if you have any other Jira or Confluence-related requests!"
+}

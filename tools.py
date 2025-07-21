@@ -19,13 +19,13 @@ class Tools:
 
         # Mock Data
         result = '# Jira Demo Ticket\n * Hi\n *Jira Content\n.'
-        state['JIRA']['message'] = result['markdown']
+        state['JIRA']['message'] = result
         state['JIRA']['status'] = 'finished'
         tool_context.state['Nodes'] = state
         self.history_cache['JIRA'].append(
             {
                 "date": time.time(),
-                "content": result['markdown']
+                "content": result
             }
         )
         return result

@@ -1,7 +1,8 @@
 from google.genai import types
-from agent import root_agent_stateful
+from agent import root_agent
 from session import SessionController
 from google.adk.runners import Runner
+import json
 
 APP_NAME = "WORKFLOW_APP"
 USER_ID = "USER001"
@@ -26,6 +27,7 @@ async def call_agent_async(query: str, runner, user_id, session_id):
             break # Stop processing events once the final response is found
 
     #print(f"<<< Agent Response: {final_response_text}")
+    return final_response_text
 
 
 class AgentRunner:
@@ -37,27 +39,29 @@ class AgentRunner:
         session_controller = SessionController()
         await session_controller.create_session(APP_NAME, USER_ID, SESSION_ID, init_state)
         self.stored_session = session_controller.session_service_stateful.sessions[APP_NAME][USER_ID][SESSION_ID]
-        print(f"State: {self.stored_session.state}")
+        #print(f"State: {self.stored_session.state}")
         self.stored_session.state['WorkflowState'] = 'Running'
-        print(f"State: {self.stored_session.state}")
+        #print(f"State: {self.stored_session.state}")
 
         # Runner Init
         self.runner_root_stateful = Runner(
-            agent=root_agent_stateful,
+            agent=root_agent,
             app_name=APP_NAME,
             session_service=session_controller.session_service_stateful
         )
 
     async def call_agent_seq(self, query: str):
-        await call_agent_async(
-        query= query,
-        runner=self.runner_root_stateful,
-        user_id=USER_ID,
-        session_id=SESSION_ID
-    )
+        return await call_agent_async(
+            query= query,
+            runner=self.runner_root_stateful,
+            user_id=USER_ID,
+            session_id=SESSION_ID
+        )
 
-    async def run_stateful_conversation(self, query_list: list[str]): 
-        for query in query_list:
-            await self.call_agent_seq(query)
+    async def run_stateful_conversation(self, query: str):
+        ai_response = await self.call_agent_seq(query)
         self.stored_session.state['WorkflowState'] = 'Finished'
-        print(f"State: {self.stored_session.state}")
+        with open("data/result.json", "w") as f:
+            json.dump(self.stored_session.state, f, indent=4)
+        #print(f"State: {self.stored_session.state}")
+        return ai_response

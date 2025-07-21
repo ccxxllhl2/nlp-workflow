@@ -50,7 +50,7 @@ requirements_agent = Agent(
 
 user_story_agent = Agent(
     model=LiteLlm(model=MODEL_DEEPSEEK),
-    name="USER STORY",
+    name="USER_STORY",
     instruction="You are the User Story Agent. Your task is to write professional UserStory based on requirements."
                 "You can analysis requirements and create query from requirements, then use the tool 'search_user_story' to search history UserStory as reference."
                 "You should save your response to state.",
@@ -68,8 +68,7 @@ root_agent = Agent(
                 "Handle ONLY Jira and Confluence requests, user requirements, and user stories."
                 "If the user's request is not related to any known sub agents, just delegate it to the security agent."
                 "You should save your response to state. "
-                "Don't include sub agent's response directly to state. But you need to summary it and include necessary information into your response.",
-    # TODO: Google Search Impl
+                "Summary  and include necessary information into your response.",
     sub_agents=[jira_agent, confluence_agent, security_agent], # Include sub-agents
     output_key="ResponseLast"
 )
