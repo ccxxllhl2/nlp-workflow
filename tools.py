@@ -1,59 +1,116 @@
 from google.adk.tools.tool_context import ToolContext
 from typing import Optional
+from collections import defaultdict
+import time
 
-class BaseTools:
-    def __init__(self, jira_token: str, jira_source: str):
-        self.jira_url = "https://w" if jira_source == 'w' else jira_source == 'a'
+class Tools:
+    def __init__(self):
+        self.history_cache = defaultdict(list)
 
-    def get_jira_ticket(self, ticket_key: str, tool_context: ToolContext) -> dict:
+    def get_jira_ticket(self, tickets: list, tool_context: ToolContext) -> str:
         """Retrieves markdown message from Jira system for demo test, directly return mock data."""
 
         # --- Read preference from state ---
-        state = tool_context.state.get('Agents')
+        state = tool_context.state.get('Nodes')
         state['JIRA']['status'] = 'running'
-        tool_context.state['Agents'] = state
-        
-        # mock
-        print(f"STATE: {tool_context.state.get('Agents')}")
+        tool_context.state['Nodes'] = state
         
         # TODO: Jira Markdown API call to get ticket details
 
         # Mock Data
-        result = {'markdown': '# Jira Demo Ticket\n * Hi\n *Jira Content\n.'}
+        result = '# Jira Demo Ticket\n * Hi\n *Jira Content\n.'
         state['JIRA']['message'] = result['markdown']
         state['JIRA']['status'] = 'finished'
-        tool_context.state['Agents'] = state
-        print(f"STATE: {tool_context.state.get('Agents')}")
+        tool_context.state['Nodes'] = state
+        self.history_cache['JIRA'].append(
+            {
+                "date": time.time(),
+                "content": result['markdown']
+            }
+        )
         return result
 
-    def say_hello(self, tool_context: ToolContext, name: Optional[str] = None) -> str: # MODIFIED SIGNATURE
-        """Provides a simple greeting. If a name is provided, it will be used."""
-        state = tool_context.state.get('Agents')
-        state['START']['status'] = 'running'
-        tool_context.state['Agents'] = state
-        print(f"STATE: {tool_context.state.get('Agents')}")
-        if name:
-            greeting = f"Hello, {name}!"
-        else:
-            greeting = "Hello there!" # Default greeting if name is None or not explicitly passed
-        state['START']['message'] = greeting
-        state['START']['status'] = 'finished'
-        tool_context.state['Agents'] = state
+    def get_confluence_info(self, ticket_url: str, tool_context: ToolContext, name: Optional[str] = None) -> str: # MODIFIED SIGNATURE
+        """Retrieves markdown message from Confluence system for demo test, directly return mock data."""
+        state = tool_context.state.get('Nodes')
+        state['CONFLUENCE']['status'] = 'running'
+        tool_context.state['Nodes'] = state
 
-        print(f"STATE: {tool_context.state.get('Agents')}")
-        return greeting
+        result = "Mock Confluence Info"
+        state['CONFLUENCE']['message'] = result
 
-    def say_goodbye(self, tool_context: ToolContext) -> str:
-        """Provides a simple farewell message to conclude the conversation."""
-        state = tool_context.state.get('Agents')
-        state['END']['status'] = 'running'
-        tool_context.state['Agents'] = state
-        print(f"STATE: {tool_context.state.get('Agents')}")
+        # TODO: Confluence API call
 
-        goodbye = "Goodbye! Have a great day."
-        state['END']['message'] = goodbye
-        state['END']['status'] = 'finished'
-        tool_context.state['Agents'] = state
+        state['CONFLUENCE']['status'] = 'finished'
+        tool_context.state['Nodes'] = state
+        self.history_cache['CONFLUENCE'].append(
+            {
+                "date": time.time(),
+                "content": result
+            }
+        )
 
-        print(f"STATE: {tool_context.state.get('Agents')}")
-        return "Goodbye! Have a great day."
+        return result
+
+    def security_logging(self, useless_info: str, tool_context: ToolContext) -> str:
+        """Warning and log user if user's request is relevent from security perspective or not about work."""
+        state = tool_context.state.get('Nodes')
+        state['SECURITY']['status'] = 'running'
+        tool_context.state['Nodes'] = state
+
+        result = "This is not about our organization. And AI will not response for it. \nYour illegal message: " + useless_info
+
+        state['SECURITY']['message'] = result
+        state['SECURITY']['status'] = 'finished'
+        tool_context.state['Nodes'] = state
+
+        self.history_cache['SECURITY'].append(
+            {
+                "date": time.time(),
+                "content": result
+            }
+        )
+
+        return result
+    
+    def search_requirements(self, query: str, tool_context: ToolContext) -> str:
+        """Search requirements in internal knowledge base based on query."""
+        state = tool_context.state.get('Nodes')
+        state['REQUIREMENTS']['status'] = 'running'
+        tool_context.state['Nodes'] = state
+
+        # TODO: Search requirements in internal knowledge base
+        result = "Mock Requirements Info"
+
+        state['REQUIREMENTS']['message'] = result
+        state['REQUIREMENTS']['status'] = 'finished'
+        tool_context.state['Nodes'] = state
+
+        self.history_cache['REQUIREMENTS'].append(
+            {
+                "date": time.time(),
+                "content": result
+            }
+        )
+        return result
+    
+    def search_user_story(self, query: str, tool_context: ToolContext) -> str:
+        """Search user story in internal knowledge base based on query."""
+        state = tool_context.state.get('Nodes')
+        state['USER STORY']['status'] = 'running'
+        tool_context.state['Nodes'] = state
+
+        # TODO: Search user story in internal knowledge base
+        result = "Mock User Story Info"
+
+        state['USER STORY']['message'] = result
+        state['USER STORY']['status'] = 'finished'
+        tool_context.state['Nodes'] = state
+
+        self.history_cache['USER STORY'].append(
+            {
+                "date": time.time(),
+                "content": result
+            }
+        )
+        return result

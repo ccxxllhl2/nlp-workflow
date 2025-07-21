@@ -1,41 +1,76 @@
 from google.adk.agents import Agent
 from google.adk.models.lite_llm import LiteLlm
-from tools import BaseTools
+from tools import Tools
 
 MODEL_DEEPSEEK = "deepseek/deepseek-chat"
-base_tools = BaseTools(jira_token="123", jira_source="w")
+base_tools = Tools()
 
-greeting_agent = Agent(
+jira_agent = Agent(
     model=LiteLlm(model=MODEL_DEEPSEEK),
-    name="START",
-    instruction="You are the Greeting Agent. Your ONLY task is to provide a friendly greeting using the 'say_hello' tool. Do nothing else.",
-    description="Handles simple greetings and hellos using the 'say_hello' tool.",
-    tools=[base_tools.say_hello],
-    #output_key="greeting_message"
-)
-print(f"Agent: [{greeting_agent.name}] ready.")
-
-farewell_agent = Agent(
-    model=LiteLlm(model=MODEL_DEEPSEEK),
-    name="END",
-    instruction="You are the Farewell Agent. Your ONLY task is to provide a polite goodbye message using the 'say_goodbye' tool. Do not perform any other actions.",
-    description="Handles simple farewells and goodbyes using the 'say_goodbye' tool.",
-    tools=[base_tools.say_goodbye],
-    #output_key="farewell_message"
-)
-print(f"Agent: [{farewell_agent.name}] ready.")
-
-root_agent_stateful = Agent(
-    name="JIRA", # New version name
-    model=LiteLlm(model=MODEL_DEEPSEEK) ,
-    description="Main agent: Provides Jira info, delegates greetings/farewells, saves message to state.",
-    instruction="You are the BusinessManager. Your job is to provide Jira info using 'get_jira_info'. "
+    name="JIRA",
+    instruction="You are the Jira Agent. Your ONLY task is to provide Jira info using 'get_jira_info' tool."
                 "The tool will format the Jira info based on user preference stored in state. "
-                "Delegate simple greetings to 'greeting_agent' and farewells to 'farewell_agent'. "
-                "Handle only Jira requests, greetings, and farewells.",
-    tools=[base_tools.get_jira_ticket], # Use the state-aware tool
-    sub_agents=[greeting_agent, farewell_agent], # Include sub-agents
-    #output_key="Jira_markdown" # <<< Auto-save agent's final response
+                "You should save your response to state.",
+    description="Provides Jira info",
+    tools=[base_tools.get_jira_ticket],
+    output_key="agentJiraLast"
 )
-print(f"Agent: [{root_agent_stateful.name}] ready.")
+
+confluence_agent = Agent(
+    model=LiteLlm(model=MODEL_DEEPSEEK),
+    name="CONFLUENCE",
+    instruction="You are the Confluence Agent. Your ONLY task is to provide Confluence info using 'get_confluence_info' tool."
+                "The tool will format the Confluence info based on user preference stored in state. "
+                "You should save your response to state.",
+    description="Output Confluence info in markdown format",
+    tools=[base_tools.get_confluence_info],
+    output_key="agentConflLast"
+)
+
+security_agent = Agent(
+    model=LiteLlm(model=MODEL_DEEPSEEK),
+    name="SECURITY",
+    instruction="You are the Security Agent. Your task is to provide the default warning info and log user request to the security log using 'security_logging' tool."
+                "The tool will log user request to the security log. "
+                "You should save your response to state.",
+    description="Output Security info in markdown format",
+    tools=[base_tools.security_logging]
+)
+
+requirements_agent = Agent(
+    model=LiteLlm(model=MODEL_DEEPSEEK),
+    name="REQUIREMENTS",
+    instruction="You are the Requirements Agent. Your task is to provide the professional requirement based on user's request."
+                "You can analysis user's intent and create query from user's message, then use the tool 'search_requirements' to search the requirements in internal knowledge base."
+                "You should save your response to state.",
+    description="Output Requirements in markdown format",
+    tools=[base_tools.search_requirements],
+    output_key="agentRequirementLast"
+)
+
+user_story_agent = Agent(
+    model=LiteLlm(model=MODEL_DEEPSEEK),
+    name="USER STORY",
+    instruction="You are the User Story Agent. Your task is to write professional UserStory based on requirements."
+                "You can analysis requirements and create query from requirements, then use the tool 'search_user_story' to search history UserStory as reference."
+                "You should save your response to state.",
+    description="Output UserStory in markdown format",
+    tools=[base_tools.search_user_story],
+    output_key="agentUserStoryLast"
+)
+
+root_agent = Agent(
+    name="Master", # New version name
+    model=LiteLlm(model=MODEL_DEEPSEEK) ,
+    description="Main agent: delegates all tasks to sub agents. Split task into sub tasks and delegate to sub agents.",
+    instruction="You are the Master Agent. Your job is to identify the user's request and delegate it to the appropriate sub agent. "
+                "User will ONLY talk with you and you need to delegate the task to the appropriate sub agent."
+                "Handle ONLY Jira and Confluence requests, user requirements, and user stories."
+                "If the user's request is not related to any known sub agents, just delegate it to the security agent."
+                "You should save your response to state. "
+                "Don't include sub agent's response directly to state. But you need to summary it and include necessary information into your response.",
+    # TODO: Google Search Impl
+    sub_agents=[jira_agent, confluence_agent, security_agent], # Include sub-agents
+    output_key="ResponseLast"
+)
 
