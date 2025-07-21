@@ -5,13 +5,17 @@
             "status": "finished",
             "message": "# Jira Demo Ticket\n * Hi\n *Jira Content\n."
         },
-        "CONFLUENCE": {},
+        "CONFLUENCE": {
+            "status": "finished",
+            "message": "Mock Confluence Info"
+        },
         "SECURITY": {
             "status": "finished",
-            "message": "This is not about our organization. And AI will not response for it. \nYour illegal message: User asked about Jira markdown info and weather today."
+            "message": "This is not about our organization. And AI will not response for it. \nYour illegal message: User asked about the weather today, which is not relevant from a security perspective."
         },
         "REQUIREMENTS": {},
         "USER STORY": {}
     },
-    "ResponseLast": "The markdown information from Jira is as follows:\n\n```markdown\n# Jira Demo Ticket\n * Hi\n *Jira Content\n```\n\nFor the weather-related query, it seems to be outside the scope of our organization's systems. Let me know if you have any other Jira or Confluence-related requests!"
+    "agentJiraLast": "The markdown info from Jira is:\n\n```markdown\n# Jira Demo Ticket\n * Hi\n *Jira Content\n.\n```\n\nFor the weather today, I cannot assist with that. Would you like any other Jira-related information?",
+    "agentConflLast": "The markdown info from Jira is:\n\n```markdown\n# Jira Demo Ticket\n * Hi\n *Jira Content\n.\n```\n\nThe Confluence info is:\n\n```markdown\nMock Confluence Info\n```\n\nFor the Google socket price today, I cannot assist with that. Would you like any other Jira or Confluence-related information?"
 }

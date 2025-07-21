@@ -1,12 +1,23 @@
 import asyncio
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from process import AgentRunner
 from agent import jira_agent, confluence_agent, security_agent, requirements_agent, user_story_agent, root_agent
 from tools import Tools
+from pydantic import BaseModel
 import inspect
 import uvicorn
 
 app = FastAPI()
+
+# 配置CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 runner = AgentRunner()
 
@@ -26,6 +37,9 @@ init_state = {
         'USER STORY': {}
     }
 }
+
+class Query(BaseModel):
+    message: str
 
 @app.get("/health")
 async def health_check():
@@ -104,8 +118,8 @@ async def get_tools():
     return {"tools": tools_info}
 
 @app.post("/chat")
-async def chat(query: str):
-    ai_response = await runner.run_stateful_conversation(query)
+async def chat(query: Query):
+    ai_response = await runner.run_stateful_conversation(query.message)
     return {"message": ai_response}
 
 if __name__ == "__main__":
