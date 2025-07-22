@@ -1,12 +1,12 @@
-import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from process import AgentRunner
-from agent import jira_agent, confluence_agent, security_agent, requirements_agent, user_story_agent, root_agent
+from agent import jira_agent, confluence_agent, security_agent, requirements_agent, user_story_agent, root_agent, base_tools
 from tools import Tools
 from pydantic import BaseModel
 import inspect
 import uvicorn
+import json
 
 app = FastAPI()
 
@@ -119,10 +119,12 @@ async def get_tools():
 
 @app.post("/chat")
 async def chat(query: Query):
+    await runner.init_session(init_state)
     ai_response = await runner.run_stateful_conversation(query.message)
+    with open('history.json', 'w') as f:
+        json.dump(base_tools.history_cache, f, indent=4)
     return {"message": ai_response}
 
 if __name__ == "__main__":
-    asyncio.run(runner.init_session(init_state))
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
