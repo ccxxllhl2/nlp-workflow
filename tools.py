@@ -19,6 +19,7 @@ class Tools:
 
         # Mock Data
         result = '# Jira Demo Ticket\n * Hi\n *Jira Content\n.'
+        state['JIRA']['timestamp'] = time.time()
         state['JIRA']['message'] = result
         state['JIRA']['status'] = 'finished'
         tool_context.state['Nodes'] = state
@@ -40,7 +41,7 @@ class Tools:
         state['CONFLUENCE']['message'] = result
 
         # TODO: Confluence API call
-
+        state['CONFLUENCE']['timestamp'] = time.time()
         state['CONFLUENCE']['status'] = 'finished'
         tool_context.state['Nodes'] = state
         self.history_cache['CONFLUENCE'].append(
@@ -59,7 +60,7 @@ class Tools:
         tool_context.state['Nodes'] = state
 
         result = "This is not about our organization. And AI will not response for it. \nYour illegal message: " + useless_info
-
+        state['SECURITY']['timestamp'] = time.time()
         state['SECURITY']['message'] = result
         state['SECURITY']['status'] = 'finished'
         tool_context.state['Nodes'] = state
@@ -81,7 +82,7 @@ class Tools:
 
         # TODO: Search requirements in internal knowledge base
         result = "Mock Requirements Info"
-
+        state['REQUIREMENTS']['timestamp'] = time.time()
         state['REQUIREMENTS']['message'] = result
         state['REQUIREMENTS']['status'] = 'finished'
         tool_context.state['Nodes'] = state
@@ -102,7 +103,7 @@ class Tools:
 
         # TODO: Search user story in internal knowledge base
         result = "Mock User Story Info"
-
+        state['USER STORY']['timestamp'] = time.time()
         state['USER STORY']['message'] = result
         state['USER STORY']['status'] = 'finished'
         tool_context.state['Nodes'] = state
