@@ -55,7 +55,7 @@ user_story_agent = LlmAgent(
                 "You can analysis requirements and create query from requirements, then use the tool 'search_user_story' to search history UserStory as reference."
                 "You should save your response to state and return to 'Master' agent.",
     description="Output UserStory in markdown format",
-    tools=[base_tools.search_user_story],
+    tools=[base_tools.output_user_story],
     #output_key="agentUserStoryLast"
 )
 
@@ -72,9 +72,8 @@ root_agent = LlmAgent(
                 "4. 'USER_STORY': Handles User Story requests when user need to translate Requirements to User Story."
                 "5. 'SECURITY': Handles illegal requests when user input any info not related to their work(No relevant agent was found)."
                 "If the user's request is not related to any known sub agents, just delegate it to the security agent. And reply 'This question is illegal here!'"
-                "You should save your response to state. "
-                "Summary and include necessary information from sub-agents into your response.",
-                sub_agents=[jira_agent, confluence_agent, security_agent, requirements_agent, user_story_agent], # Include sub-agents
+                "Out put the last message from sub agent",
+    sub_agents=[jira_agent, confluence_agent, security_agent, requirements_agent, user_story_agent], # Include sub-agents
     output_key="ResponseLast"
 )
 

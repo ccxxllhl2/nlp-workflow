@@ -1,18 +1,15 @@
 {
     "WorkflowState": "Finished",
     "Nodes": {
-        "JIRA": {
-            "status": "finished",
-            "timestamp": 1753197653.4612916,
-            "message": "# Jira Demo Ticket\n * Hi\n *Jira Content\n."
-        },
+        "JIRA": {},
         "CONFLUENCE": {},
-        "SECURITY": {},
-        "REQUIREMENTS": {},
-        "USER STORY": {
+        "SECURITY": {
             "status": "finished",
-            "timestamp": 1753197666.9084048,
-            "message": "Mock User Story Info"
-        }
-    }
+            "timestamp": 1753281059.9880557,
+            "message": "This is not about our organization. And AI will not response for it. \nYour illegal message: User requested Google stock price information - flagged as non-work related financial query requiring security review"
+        },
+        "REQUIREMENTS": {},
+        "USER STORY": {}
+    },
+    "ResponseLast": "This question is illegal here!\n\n# \ud83d\udd12 Security Warning\n\n**SECURITY ALERT**: Request logged for review.\n\nYour request about Google stock prices has been flagged as it appears to be **outside the scope of work-related activities** and may involve external financial information that could pose security risks.\n\n## Security Guidelines:\n- \u26a0\ufe0f Financial queries should go through approved channels\n- \ud83d\udd10 External data requests require proper authorization\n- \ud83d\udccb All non-work related requests are monitored\n\nYour request has been logged to the security system for compliance purposes.\n\n## Security Log Updated \u2705\n\nYour request has been officially logged as inappropriate. Please limit your queries to work-related matters only."
 }
