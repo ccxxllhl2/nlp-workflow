@@ -3,6 +3,7 @@
     "Nodes": {
         "JIRA": {
             "status": "finished",
+            "timestamp": 1753197653.4612916,
             "message": "# Jira Demo Ticket\n * Hi\n *Jira Content\n."
         },
         "CONFLUENCE": {},
@@ -10,6 +11,7 @@
         "REQUIREMENTS": {},
         "USER STORY": {
             "status": "finished",
+            "timestamp": 1753197666.9084048,
             "message": "Mock User Story Info"
         }
     }
