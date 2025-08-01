@@ -2,9 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from process import AgentRunner
 from agent import jira_agent, confluence_agent, security_agent, requirements_agent, user_story_agent, root_agent, base_tools
-from tools import Tools
+from tools.tool import Tools
 from pydantic import BaseModel
 import inspect
+import asyncio
 import uvicorn
 import json
 
@@ -19,14 +20,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-runner = AgentRunner()
-
-user_input = [
-    "Hi!",
-    "What's the markdown info from Jira?",
-    "What's the weather today?"
-]
-
 init_state = {
     'WorkflowState': 'Init',
     'Nodes': {
@@ -37,6 +30,15 @@ init_state = {
         'USER STORY': {}
     }
 }
+
+runner = AgentRunner()
+asyncio.run(runner.init_session(init_state))
+
+user_input = [
+    "Hi!",
+    "What's the markdown info from Jira?",
+    "What's the weather today?"
+]
 
 class Query(BaseModel):
     message: str
@@ -119,7 +121,6 @@ async def get_tools():
 
 @app.post("/chat")
 async def chat(query: Query):
-    await runner.init_session(init_state)
     ai_response = await runner.run_stateful_conversation(query.message)
     with open('history.json', 'w') as f:
         json.dump(base_tools.history_cache, f, indent=4)

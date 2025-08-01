@@ -1,38 +1,39 @@
 from google.genai import types
 from agent import root_agent
 from session import SessionController
+from google.adk.memory import InMemoryMemoryService
 from google.adk.runners import Runner
 import json
 
 APP_NAME = "WORKFLOW_APP"
 USER_ID = "USER001"
-SESSION_ID = "SESSION001" 
+SESSION_ID = "SESSION001"
+
+init_state = {
+    'WorkflowState': 'Init',
+    'Nodes': {
+        'JIRA': {},
+        'CONFLUENCE': {},
+        'SECURITY': {},
+        'REQUIREMENTS': {},
+        'USER STORY': {}
+    }
+}
+
+memory_service = InMemoryMemoryService()
 
 async def call_agent_async(query: str, runner, user_id, session_id):
-    """Sends a query to the agent and prints the final response."""
-    #print(f"\n>>> User Query: {query}")
-
-    # Prepare the user's message in ADK format
     content = types.Content(role='user', parts=[types.Part(text=query)])
-
-    final_response_text = "Agent did not produce a final response." # Default
+    final_response = "Agent Response:\n"
     async for event in runner.run_async(user_id=user_id, session_id=session_id, new_message=content):
         if event.is_final_response():
-            if event.content and event.content.parts:
-                # Assuming text response in the first part
-                final_response_text = event.content.parts[0].text
-            elif event.actions and event.actions.escalate: # Handle potential errors/escalations
-                final_response_text = f"Agent escalated: {event.error_message or 'No specific message.'}"
-            # Add more checks here if needed (e.g., specific error codes)
-            break # Stop processing events once the final response is found
-
-    #print(f"<<< Agent Response: {final_response_text}")
-    return final_response_text
+            final_response = event.content.parts[0].text
+    return final_response
 
 
 class AgentRunner:
     def __init__(self, ):
-        pass
+        self.init_session(init_state)
 
     async def init_session(self, init_state):
         # Session Init
@@ -47,7 +48,8 @@ class AgentRunner:
         self.runner_root_stateful = Runner(
             agent=root_agent,
             app_name=APP_NAME,
-            session_service=session_controller.session_service_stateful
+            session_service=session_controller.session_service_stateful,
+            memory_service=memory_service
         )
 
     async def call_agent_seq(self, query: str):

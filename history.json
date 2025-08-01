@@ -1,36 +1,14 @@
 {
-    "JIRA": [
-        {
-            "date": 1753280892.0439506,
-            "content": "# Summary\nDevelop the workflow PoC based on ADK\n\n## Description\nThis PoC is for a new workflow app with a multi-agent architecture by Google ADK. The following features will be implemented:\n\n- **NLP Needs**: User can talk to the Host Agent about their needs within the flow.\n- **Workflow Arrangement**: The Master Agent will collect Worker Agents from the library and confirm the sequence of jobs based on user needs.\n- **Workflow Running**: Worker Agents will follow the Host Agent's order to complete their assigned jobs and then update the information to the Session State.\n- **Show Workflow**: Develop a frontend to dynamically display the workflow state and the results of every agent.\n\n## Task information\n- **Status**: In Progress\n- **Updated**: 2025-07-17T04:55:17.000+0000\n- **Issue Type**: Task\n\n## Relative Documentation\n* https://confluence-url"
-        }
-    ],
-    "CONFLUENCE": [
-        {
-            "date": 1753280903.133893,
-            "content": "[https://confluence-url](https://confluence-url)\nPilot will be progressing for the AI project with participation from all Value Streams and most Regions.\nRecommended Team Composition:\n* Business Analysts (BA): Responsible for gathering requirements, analyzing data, and supporting tool implementation.\n* Project Managers (PM): Responsible for overseeing project delivery, timelines, and coordination.\n* Project Management Office (PMO): Responsible for governance, reporting, and administrative support."
-        }
-    ],
     "REQUIREMENTS": [
         {
-            "date": 1753280914.7762737,
+            "date": 1754059418.2895453,
             "content": "Here\u2019s a concise **Requirements Document** based on your provided Jira task description:\n\n---\n\n**# AI Application \u2013 Requirements Document**\n\n**1. Overview**\nDevelop a Proof of Concept (PoC) for an AI-driven muti-agent application utilizing **. The system should enable natural language interaction, dynamic task orchestration, agent collaboration, and real-time visualization of workflow execution.\n\n---\n\n**2. Core Features**\n\n### 2.1 Natural Language Processing (NLP) Interface\n\n* Users can **describe workflow needs** via conversation with the **Host Agent**.\n* The system must parse and interpret these inputs into actionable intents.\n\n### 2.2 Workflow Composition\n\n* A **Master Agent** orchestrates task planning:\n\n  * Selects **Worker Agents** from an existing agent library.\n  * Arranges them in a **logical sequence** based on the user\u2019s needs.\n\n### 2.3 Workflow Execution\n\n* **Worker Agents** execute assigned tasks in order.\n* Each agent:\n\n  * Receives instructions from the Host Agent.\n  * Executes its task autonomously.\n  * Reports results and updates to the **Session State**.\n\n### 2.4 Frontend Visualization\n\n* A web-based UI will:\n\n  * **Dynamically visualize** workflow state and progress.\n  * Display results and status for each agent involved.\n  * Refresh in real-time as the workflow progresses.\n\n---\n\n**3. Technical Requirements**\n\n* **Backend**:\n\n  * Based on **Google ADK** for agent definition and orchestration.\n  * Session management for maintaining workflow context.\n\n* **Frontend**:\n\n  * Dynamic rendering of **workflow DAG or sequence view**.\n  * Real-time updates from backend using WebSocket or polling.\n\n* **Data**:\n\n  * Session State must persist user intent, task status, agent responses.\n\n---\n\n**4. Status & Next Steps**\n\n* **Current Status**: In Progress\n* **Tasks**:\n\n  * Define Host, Master, and Worker Agent behaviors.\n  * Build ADK-based backend logic.\n  * Design and implement dynamic frontend.\n  * Integrate session state management.\n\n---\n\nLet me know if you'd like a breakdown into user stories or an architecture sketch next.\n"
         }
     ],
     "USER STORY": [
         {
-            "date": 1753280926.9212995,
+            "date": 1754059451.457636,
             "content": "Here is a **User Story** tailored for an IT developer, based on your AI Workflow App using Google ADK:\n\n---\n\n### **User Story: AI-Driven Workflow Orchestration with Multi-Agent System**\n\n**Title:**\nAs a user, I want to describe my workflow needs in natural language and have an AI system organize, execute, and display the workflow using agents, so that I can automate multi-step processes without coding.\n\n---\n\n**Background:**\nThis PoC leverages **Google ADK** to build a **multi-agent architecture**, enabling dynamic workflow creation and execution based on user intent. The system involves a **Host Agent**, **Master Agent**, and multiple **Worker Agents** that communicate and collaborate to fulfill the user's goal.\n\n---\n\n### **Acceptance Criteria:**\n\n1. **NLP Interaction:**\n\n   * [ ] The system provides a chat interface where the user can express their workflow needs in natural language.\n   * [ ] The **Host Agent** interprets user input and extracts actionable tasks or goals.\n\n2. **Workflow Composition:**\n\n   * [ ] The **Master Agent** selects relevant **Worker Agents** from a predefined library.\n   * [ ] The **Master Agent** arranges Worker Agents into a sequence (or DAG) based on task dependencies and user goals.\n\n3. **Workflow Execution:**\n\n   * [ ] The **Host Agent** initiates workflow execution.\n   * [ ] Each **Worker Agent** receives tasks, performs them, and updates the shared **Session State** with results.\n   * [ ] Agents must operate independently but maintain a synchronized state via a session context.\n\n4. **Frontend Visualization:**\n\n   * [ ] A web interface displays the current workflow, showing:\n\n     * Agent names and roles\n     * Current task status (pending, running, completed)\n     * Results or outputs from each Worker Agent\n   * [ ] The UI updates in real time as the workflow progresses.\n\n---\n\n**Dependencies & Tech Stack:**\n\n* **Agent Framework**: Google ADK\n* **Frontend**: React or similar SPA framework (TBD)\n* **Backend**: Python/Node (depending on ADK integration needs)\n* **Real-time Updates**: WebSocket or polling mechanism\n* **Data Store**: In-memory for PoC, expandable to Redis/Postgres\n\n---\n\n**Notes for Developers:**\n\n* Keep agents modular and stateless where possible.\n* Design with extensibility: users may eventually define custom Worker Agents or new types of workflows.\n* Use mock Worker Agents for initial testing (e.g., math operations, data fetchers).\n* Prioritize traceability\u2014users should be able to trace how their input leads to specific agent actions.\n\n---\n\nLet me know if you'd like the **epic breakdown**, **technical tasks**, or **architecture diagram** next.\n"
-        }
-    ],
-    "SECURITY": [
-        {
-            "date": 1753281022.3575013,
-            "content": "This is not about our organization. And AI will not response for it. \nYour illegal message: User requested weather information for Beijing - not work-related query"
-        },
-        {
-            "date": 1753281059.9880557,
-            "content": "This is not about our organization. And AI will not response for it. \nYour illegal message: User requested Google stock price information - flagged as non-work related financial query requiring security review"
         }
     ]
 }

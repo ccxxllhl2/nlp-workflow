@@ -1,4 +1,3 @@
-import asyncio
 from google.adk.sessions import InMemorySessionService
 
 class SessionController:

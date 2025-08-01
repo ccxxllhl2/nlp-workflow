@@ -8,8 +8,9 @@ class Tools:
     def __init__(self):
         self.history_cache = defaultdict(list)
 
-    def get_jira_ticket(self, tickets: list, tool_context: ToolContext) -> str:
+    def get_jira_ticket(self, ticket: Optional[str], tool_context: ToolContext) -> str:
         """Retrieves markdown message from Jira system for demo test, directly return mock data."""
+        print(ticket)
 
         # --- Read preference from state ---
         state = tool_context.state.get('Nodes')
@@ -52,8 +53,9 @@ This PoC is for a new workflow app with a multi-agent architecture by Google ADK
         )
         return result
 
-    def get_confluence_info(self, ticket_url: str, tool_context: ToolContext, name: Optional[str] = None) -> str: # MODIFIED SIGNATURE
+    def get_confluence_info(self, ticket_url: Optional[str], tool_context: ToolContext) -> str: # MODIFIED SIGNATURE
         """Retrieves markdown message from Confluence system for demo test, directly return mock data."""
+        print(ticket_url)
         state = tool_context.state.get('Nodes')
         state['CONFLUENCE']['timestamp'] = time.time()
         state['CONFLUENCE']['message'] = "Waiting Agent Return..."
@@ -84,7 +86,7 @@ Recommended Team Composition:
 
         return result
 
-    def security_logging(self, useless_info: str, tool_context: ToolContext) -> str:
+    def security_logging(self, useless_info: Optional[str], tool_context: ToolContext) -> str:
         """Warning and log user if user's request is relevent from security perspective or not about work."""
         state = tool_context.state.get('Nodes')
         state['SECURITY']['status'] = 'running'
@@ -105,7 +107,7 @@ Recommended Team Composition:
 
         return result
     
-    def search_requirements(self, query: str, tool_context: ToolContext) -> str:
+    def search_requirements(self, query: Optional[str], tool_context: ToolContext) -> str:
         """Search requirements in internal knowledge base based on query."""
         state = tool_context.state.get('Nodes')
         state['REQUIREMENTS']['status'] = 'running'
